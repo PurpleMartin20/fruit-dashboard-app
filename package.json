@@ -1,0 +1,13 @@
+{
+  "name": "dashboard-app",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run start --workspace=frontend",
+    "android": "npm run android --workspace=frontend",
+    "web": "npm run web --workspace=frontend"
+  }
+}
