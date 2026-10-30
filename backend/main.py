@@ -15,7 +15,7 @@ class Fruits(BaseModel):
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "http://localhost:8081",
 ]
 
 app.add_middleware(
@@ -23,7 +23,8 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],)
+    allow_headers=["*"],
+)
 
 memory_db ={"fruits": []}
 
