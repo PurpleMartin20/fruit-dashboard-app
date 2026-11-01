@@ -1,5 +1,8 @@
+from _pyrepl import console
+
 import uvicorn
-from fastapi import FastAPI
+import uuid
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
@@ -7,6 +10,7 @@ from typing import List
 
 
 class Fruit(BaseModel):
+    _id: str
     name: str
     price: float
 
@@ -36,8 +40,29 @@ async def get_fruits():
 
 @app.post("/fruits", response_model=Fruit)
 def add_fruit(fruit: Fruit):
+    fruit._id = str(uuid.uuid4())
+
+    print(fruit._id)
+
     memory_db["fruits"].append(fruit)
+    
     return fruit
+
+@app.delete("/fruits/{fruit_id}")
+def delete_fruit(fruit_id: str):
+    for fruit in memory_db["fruits"]:
+        if fruit._id == fruit_id:
+            memory_db["fruits"].remove(fruit)
+
+            return {
+                "message": "Fruit deleted successfully",
+                "id": fruit_id
+            }
+
+    raise HTTPException(
+        status_code=404,
+        detail="Fruit not found"
+    )
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

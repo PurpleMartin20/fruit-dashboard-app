@@ -11,19 +11,20 @@ import { Center } from '@/components/ui/center';
 import { VStack } from '@/components/ui/vstack';
 import { Heading } from '@/components/ui/heading';
 import { Grid, GridItem } from '@/components/ui/grid';
-import { HStack } from '@/components/ui/hstack';
+import { Image } from '@/components/ui/image';
+import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 
 
 
 import { useToast, Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 
 interface Fruit {
-  id: number;
+  _id: string;
   name: string;
   price: number;
 }
 
-interface FruitsResponse {  
+interface FruitsResponse {
   fruits: Fruit[];
 }
 
@@ -48,7 +49,7 @@ const FruitList = () => {
       });
 
       toast.show({
-        placement: 'bottom right',
+        placement: 'top',
         duration: 3000,
         render: ({ id }) => (
           <Toast nativeID={`toast-${id}`} action="success">
@@ -64,7 +65,7 @@ const FruitList = () => {
 
     } catch (error) {
       toast.show({
-        placement: 'bottom right',
+        placement: 'top',
         duration: 3000,
         render: ({ id }) => (
           <Toast nativeID={`toast-${id}`} action="error">
@@ -84,32 +85,77 @@ const FruitList = () => {
     fetchFruits();
   }, []);
 
+
+  const handleBuy = (fruit: Fruit) => {
+    toast.show({
+      placement: 'top',
+      render: ({ id }) => (
+        <Toast nativeID={`toast-${id}`} action="success" variant="solid">
+          <VStack space="xs">
+            <ToastTitle>Purchase Successful!</ToastTitle>
+            <ToastDescription>
+              You bought {fruit.name} for ${fruit.price.toFixed(2)}.
+            </ToastDescription>
+          </VStack>
+        </Toast>
+      ),
+    });
+  };
+
+
+
   return (
     <>
       <Grid className="gap-4" _extra={{ className: 'grid-cols-5' }}>
-        <GridItem _extra={{ className: 'col-span-3' }}>
+        <GridItem key="fruit-form" _extra={{ className: 'col-span-3' }}>
           <Center className="flex h-screen">
-            <Card>
+            <Card className=" ">
               <VStack space="xl" className="py-2">
-                <Heading>Fruit List</Heading>
+                <Center>
+                  <Box>
+                    <Heading> Fruit </Heading>
+                  </Box>
+                </Center>
                 <Box className=" rounded-md  p-5" >
-                  {fruits.map((fruit) => (
-                    <Box className="bg-muted p-12 rounded-md">
-                      <Text className="text-primary-foreground" key={fruit.id}>
-                        {fruit.name} - ${fruit.price.toFixed(2)}
-                      </Text>
-                    </Box>
-                  ))}
+                  <Grid className="gap-4" _extra={{ className: 'grid-cols-5' }}>
+                    {fruits.map((fruit) => (
+                      <GridItem key={fruit._id} _extra={{ className: 'rows-span-1' }}>
+                        <Card className="bg-muted p-1 rounded-md ">
+                          <Image
+                            source={{
+                              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVFtcUjPx2GGJXQ8Gsw4qClcitE3gRrbVSVDwo3BtmPw&s=10',
+                            }}
+                            className=" h-[240px] w-full rounded-md aspect-[263/240]"
+                            alt={fruit._id}
+                          />
+
+                          <Heading className="text-white text-center" key={fruit.id}>
+                            {fruit.name}
+                          </Heading >
+                          <Text className="text-purple-300 text-center" key={fruit.id}>
+                            Price - ${fruit.price.toFixed(2)}
+                          </Text>
+                          <Button className="bg-green-700" variant="default" size="default" onPress={() => handleBuy(fruit)} >
+                            <ButtonText>Buy</ButtonText>
+                          </Button>
+                          <Text className="text-primary-foreground">
+                            ID: {fruit._id}
+                          </Text>
+                        </Card>
+                      </GridItem>
+                    ))}
+
+                  </Grid>
                 </Box>
               </VStack>
             </Card>
           </Center>
         </GridItem>
-        <GridItem _extra={{ className: 'col-span-2' }}>
+        <GridItem key="add-fruit-form" _extra={{ className: 'col-span-2' }}>
           <AddFruitForm addFruit={addFruit} />
         </GridItem>
 
-      </Grid>
+      </Grid >
 
 
     </>

@@ -36,7 +36,7 @@ const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
         <VStack space="xl" className="py-2">
           <Center>
             <Box>
-              <Heading>TEST</Heading>
+              <Heading>Add Fruit </Heading>
             </Box>
           </Center>
 
