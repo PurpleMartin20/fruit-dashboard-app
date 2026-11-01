@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Text } from '@/components/ui/text';
 
-import api from '../../srev/api';
+import api from '../../services/api';
 import AddFruitForm from '@/components/fruit/AddFruitForm';
 
 import { Box } from '@/components/ui/box';
@@ -10,15 +10,20 @@ import { Card } from '@/components/ui/card';
 import { Center } from '@/components/ui/center';
 import { VStack } from '@/components/ui/vstack';
 import { Heading } from '@/components/ui/heading';
+import { Grid, GridItem } from '@/components/ui/grid';
+import { HStack } from '@/components/ui/hstack';
+
+
 
 import { useToast, Toast, ToastTitle, ToastDescription } from '@/components/ui/toast';
 
 interface Fruit {
   id: number;
   name: string;
+  price: number;
 }
 
-interface FruitsResponse {
+interface FruitsResponse {  
   fruits: Fruit[];
 }
 
@@ -35,9 +40,12 @@ const FruitList = () => {
     }
   };
 
-  const addFruit = async (fruitName: string): Promise<void> => {
+  const addFruit = async (name: string, price: number): Promise<void> => {
     try {
-      await api.post('/fruits', { name: fruitName });
+      await api.post('/fruits', {
+        name: name.trim(),
+        price: price,
+      });
 
       toast.show({
         placement: 'bottom right',
@@ -46,7 +54,7 @@ const FruitList = () => {
           <Toast nativeID={`toast-${id}`} action="success">
             <ToastTitle>Success!</ToastTitle>
             <ToastDescription>
-              {fruitName} added successfully.
+              {name} added successfully.
             </ToastDescription>
           </Toast>
         ),
@@ -78,23 +86,31 @@ const FruitList = () => {
 
   return (
     <>
-      <AddFruitForm addFruit={addFruit} />
+      <Grid className="gap-4" _extra={{ className: 'grid-cols-5' }}>
+        <GridItem _extra={{ className: 'col-span-3' }}>
+          <Center className="flex h-screen">
+            <Card>
+              <VStack space="xl" className="py-2">
+                <Heading>Fruit List</Heading>
+                <Box className=" rounded-md  p-5" >
+                  {fruits.map((fruit) => (
+                    <Box className="bg-muted p-12 rounded-md">
+                      <Text className="text-primary-foreground" key={fruit.id}>
+                        {fruit.name} - ${fruit.price.toFixed(2)}
+                      </Text>
+                    </Box>
+                  ))}
+                </Box>
+              </VStack>
+            </Card>
+          </Center>
+        </GridItem>
+        <GridItem _extra={{ className: 'col-span-2' }}>
+          <AddFruitForm addFruit={addFruit} />
+        </GridItem>
 
-      <Center className="flex h-screen">
-        <Card>
-          <VStack space="xl" className="py-2">
-            <Heading>Fruit List</Heading>
+      </Grid>
 
-            <Box>
-              {fruits.map((fruit) => (
-                <Text key={fruit.id} testID={fruit.name}>
-                  {fruit.name}
-                </Text>
-              ))}
-            </Box>
-          </VStack>
-        </Card>
-      </Center>
 
     </>
   );

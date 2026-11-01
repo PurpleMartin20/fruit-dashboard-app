@@ -3,7 +3,7 @@ import { Box } from '@/components/ui/box';
 import { Center } from '@/components/ui/center';
 import { Text } from '@/components/ui/text';
 import { useEffect, useState } from 'react';
-import api from "../srev/api";
+import api from "../services/api";
 
 
 export default function Home() {

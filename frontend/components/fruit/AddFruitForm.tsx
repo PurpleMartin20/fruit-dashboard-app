@@ -12,16 +12,21 @@ import { VStack } from '@/components/ui/vstack';
 import { AddIcon } from '../ui/icon';
 
 interface AddFruitFormProps {
-  addFruit: (fruit: string) => void;
+  addFruit: (fruitName: string, fruitPrice: number) => void;
 }
 
 const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
   const [fruitName, setFruitName] = useState('');
+  const [fruitPrice, setFruitPrice] = useState('');
 
   const handleSubmit = () => {
-    if (fruitName.trim()) {
-      addFruit(fruitName.trim());
+    const price = parseFloat(fruitPrice);
+
+    if (fruitName.trim() && fruitPrice.trim() && !isNaN(price) && price >= 0) {
+      addFruit(fruitName.trim(), price);
+
       setFruitName('');
+      setFruitPrice('');
     }
   };
 
@@ -43,6 +48,15 @@ const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
             />
           </Input>
 
+          <Input>
+            <InputField
+              placeholder="Fruit price (e.g. 2.99)"
+              value={fruitPrice}
+              onChangeText={setFruitPrice}
+              keyboardType="decimal-pad"
+            />
+          </Input>
+
           <Box className="px-10">
             <HStack space="xl">
               <Button
@@ -50,9 +64,9 @@ const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
                 size="default"
                 onPress={handleSubmit}
               >
-                <ButtonIcon as={AddIcon}/>
+                <ButtonIcon as={AddIcon} />
                 <ButtonText>ADD</ButtonText>
-                
+
               </Button>
             </HStack>
           </Box>
