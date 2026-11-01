@@ -1,5 +1,3 @@
-from _pyrepl import console
-
 import uvicorn
 import uuid
 from fastapi import FastAPI, HTTPException
