@@ -1,20 +1,7 @@
-import uvicorn
-import uuid
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List
-
-
-
-class Fruit(BaseModel):
-    _id: str
-    name: str
-    price: float
-
-
-class Fruits(BaseModel):
-    fruits: List[Fruit]
+from schemas import FruitCreate, FruitResponse
+from enums import FruitStatus
 
 app = FastAPI()
 
@@ -30,37 +17,58 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-memory_db ={"fruits": []}
+fruits = []
+next_id = 1
 
-@app.get("/fruits", response_model=Fruits)
-async def get_fruits():
-    return Fruits(fruits=memory_db["fruits"])
 
-@app.post("/fruits", response_model=Fruit)
-def add_fruit(fruit: Fruit):
-    fruit._id = str(uuid.uuid4())
+@app.post("/fruits", response_model=FruitResponse)
+def create_fruit(fruit: FruitCreate):
+    global next_id
 
-    print(fruit._id)
+    new_fruit = {
+        "id": next_id,
+        **fruit.model_dump()
+    }
 
-    memory_db["fruits"].append(fruit)
-    
-    return fruit
+    fruits.append(new_fruit)
+    next_id += 1
 
-@app.delete("/fruits/{fruit_id}")
-def delete_fruit(fruit_id: str):
-    for fruit in memory_db["fruits"]:
-        if fruit._id == fruit_id:
-            memory_db["fruits"].remove(fruit)
+    return new_fruit
 
-            return {
-                "message": "Fruit deleted successfully",
-                "id": fruit_id
-            }
 
-    raise HTTPException(
-        status_code=404,
-        detail="Fruit not found"
+@app.get("/fruits", response_model=list[FruitResponse])
+def get_fruits():
+    return fruits
+
+
+@app.patch("/fruits/{fruit_id}/buy", response_model=FruitResponse)
+def buy_fruit(fruit_id: int):
+    fruit = next(
+        (f for f in fruits if f["id"] == fruit_id),
+        None
     )
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    if not fruit:
+        raise HTTPException(status_code=404, detail="Fruit not found")
+
+    if fruit["status"] != FruitStatus.AVAILABLE:
+        raise HTTPException(status_code=400, detail="Fruit is not available")
+
+    fruit["status"] = FruitStatus.SOLD
+
+    return fruit
+
+
+@app.delete("/fruits/{fruit_id}")
+def delete_fruit(fruit_id: int ):
+    fruit = next(
+        (f for f in fruits if f["id"] == fruit_id),
+        None
+    )
+
+    if not fruit:
+        raise HTTPException(status_code=404, detail="Fruit not found")
+
+    fruits.remove(fruit)
+
+    return {"message": "Fruit deleted successfully", "id": fruit_id}
