@@ -204,7 +204,7 @@ Test files live in `cypress/e2e/`. A shared `cy.resetDB()` custom command (defin
 Tests the FastAPI endpoints directly using `cy.request()`, no UI involved.
 
 | Test | Description |
-|------|-------------|
+|------|-------------|-
 | Add Fruit (Available) | `POST /fruits` with status `0` returns correct body |
 | Add Fruit (Reserved) | `POST /fruits` with status `1` returns correct body |
 | Add Fruit (Sold) | `POST /fruits` with status `2` returns correct body |
