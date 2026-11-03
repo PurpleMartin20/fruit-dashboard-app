@@ -204,7 +204,7 @@ Test files live in `cypress/e2e/`. A shared `cy.resetDB()` custom command (defin
 Tests the FastAPI endpoints directly using `cy.request()`, no UI involved.
 
 | Test | Description |
-|------|-------------|-
+|------|-------------|
 | Add Fruit (Available) | `POST /fruits` with status `0` returns correct body |
 | Add Fruit (Reserved) | `POST /fruits` with status `1` returns correct body |
 | Add Fruit (Sold) | `POST /fruits` with status `2` returns correct body |
@@ -227,3 +227,10 @@ Tests the Add Fruit form end-to-end through the browser.
 | Test | Description |
 |------|-------------|
 | Add Fruit (Available) | Fills form, submits, and asserts the new fruit card appears with correct name, price, and status |
+
+
+
+Built a full-stack fruit inventory app with a React Native / Expo (TypeScript) frontend and a FastAPI (Python) REST API
+Designed a RESTful API with endpoints for creating, buying, and deleting inventory items, with status-driven business logic (Available → Sold)
+Wrote Cypress end-to-end tests covering both UI flows and direct API calls, with a shared resetDB command to isolate each test
+Used GlueStack UI and NativeWind (Tailwind) to build a responsive grid layout with toast notifications and real-time state updates
