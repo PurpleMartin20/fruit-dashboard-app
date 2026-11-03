@@ -61,10 +61,11 @@ The API will be available at `http://localhost:8000`.
 
 ### Frontend
 
+From the project root:
+
 ```bash
-cd frontend
 npm install
-npm run web
+npm run dev
 ```
 
 The app will open at `http://localhost:8081`.
@@ -76,7 +77,6 @@ The app will open at `http://localhost:8081`.
 From the project root:
 
 ```bash
-npm install
 npx cypress open
 ```
 
