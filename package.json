@@ -9,5 +9,9 @@
     "dev": "npm run start --workspace=frontend",
     "android": "npm run android --workspace=frontend",
     "web": "npm run web --workspace=frontend"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "cypress": "^16.2.1"
   }
 }

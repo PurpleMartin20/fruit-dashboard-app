@@ -59,6 +59,14 @@ def buy_fruit(fruit_id: int):
     return fruit
 
 
+@app.post("/reset")
+def reset_db():
+    global next_id
+    fruits.clear()
+    next_id = 1
+    return {"message": "Database reset"}
+
+
 @app.delete("/fruits/{fruit_id}")
 def delete_fruit(fruit_id: int ):
     fruit = next(

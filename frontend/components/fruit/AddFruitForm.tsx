@@ -30,17 +30,17 @@ interface AddFruitFormProps {
 const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
   const [fruitName, setFruitName] = useState('');
   const [fruitPrice, setFruitPrice] = useState('');
-  const [status, setStatus] = useState<FruitStatus>(FruitStatus.AVAILABLE);
+  const [status, setStatus] = useState<FruitStatus | null>(null);
 
   const handleSubmit = () => {
     const price = parseFloat(fruitPrice);
 
-    if (fruitName.trim() && fruitPrice.trim() && !isNaN(price) && price >= 0) {
+    if (fruitName.trim() && fruitPrice.trim() && !isNaN(price) && price >= 0 && status !== null) {
       addFruit(fruitName.trim(), price, status);
 
       setFruitName('');
       setFruitPrice('');
-      setStatus(FruitStatus.AVAILABLE);
+      setStatus(null);
     }
   };
 
@@ -75,8 +75,7 @@ const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
             <Text>Status</Text>
             {/* Select values are strings, so convert to/from the enum number */}
             <Select
-              selectedValue={String(status)}
-              initialLabel={FRUIT_STATUS_UI[status].label}
+              selectedValue={status !== null ? String(status) : undefined}
               onValueChange={(value) => setStatus(Number(value) as FruitStatus)}
             >
               <SelectTrigger>
@@ -102,6 +101,7 @@ const AddFruitForm = ({ addFruit }: AddFruitFormProps) => {
               className="px-10"
               size="default"
               onPress={handleSubmit}
+              testID="add-fruit-submit"
             >
               <ButtonIcon as={AddIcon} />
               <ButtonText>ADD</ButtonText>

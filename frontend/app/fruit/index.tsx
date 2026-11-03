@@ -195,7 +195,7 @@ const FruitList = () => {
 
                       return (
                       <GridItem key={fruit.id} _extra={{ className: 'rows-span-1' }}>
-                        <Card className={`bg-muted p-1 rounded-md ${statusUI.canBuy ? '' : 'opacity-60'}`}>
+                        <Card className={`bg-muted p-1 rounded-md ${statusUI.canBuy ? '' : 'opacity-60'}`} testID={`fruit-listing-${fruit.id}`}> 
                           <Image
                             source={{
                               uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVFtcUjPx2GGJXQ8Gsw4qClcitE3gRrbVSVDwo3BtmPw&s=10',
@@ -204,14 +204,14 @@ const FruitList = () => {
                             alt={fruit.name}
                           />
 
-                          <Badge className={`self-center my-1 ${statusUI.badgeClass}`}>
+                          <Badge className={`self-center my-1 ${statusUI.badgeClass}`} testID={`fruit-status-${fruit.id}`} >
                             <BadgeText className="text-white">{statusUI.label}</BadgeText>
                           </Badge>
 
-                          <Heading className="text-white text-center" >
+                          <Heading className="text-white text-center" testID={`fruit-name-${fruit.id}`}>
                             {fruit.name}
                           </Heading >
-                          <Text className="text-purple-300 text-center" >
+                          <Text className="text-purple-300 text-center" testID={`fruit-price-${fruit.id}`}>
                             Price - ${fruit.price.toFixed(2)}
                           </Text>
                           <Button
@@ -220,6 +220,7 @@ const FruitList = () => {
                             size="default"
                             isDisabled={!statusUI.canBuy}
                             onPress={() => handleBuy(fruit)}
+                            testID={`fruit-buy-${fruit.id}`}
                           >
                             <ButtonText>{statusUI.canBuy ? 'Buy' : statusUI.label}</ButtonText>
                           </Button>
@@ -232,6 +233,7 @@ const FruitList = () => {
                               size="sm"
                               className="p-1"
                               onPress={() => handleDelete(fruit)}
+                              testID={`fruit-delete-${fruit.id}`}
                             >
                               <ButtonIcon as={TrashIcon} className="text-red-500" />
                             </Button>
