@@ -2,8 +2,14 @@ import { faker } from '@faker-js/faker';
 
 describe('Fruit Api Test', () => {
 
+  let getRandomPrice
+  let getRandomName
+
   beforeEach(() => {
     cy.resetDB();
+
+    getRandomPrice = faker.number.float({ min: 10, max: 100, multipleOf: 0.02 })
+    getRandomName = faker.food.fruit()
 
     cy.request('POST', 'http://localhost:8000/fruits', {
       name: getRandomName,
@@ -13,8 +19,7 @@ describe('Fruit Api Test', () => {
   })
 
 
-  let getRandomPrice = faker.number.float({ min: 10, max: 100, multipleOf: 0.02 })
-  let getRandomName = faker.person.firstName()
+
 
   it('Fruit Api Test - Add Fruit (status AVAILABLE)', () => {
     cy.request('POST', 'http://localhost:8000/fruits', {

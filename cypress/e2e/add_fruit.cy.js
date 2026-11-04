@@ -3,16 +3,25 @@ import { faker } from '@faker-js/faker';
 
 describe('Add Fruit ', () => {
 
-  let getRandomPrice = faker.number.float({ min: 10, max: 100, multipleOf: 0.02 })
-  let getRandomName = faker.person.firstName()
+  let getRandomPrice 
+  let getRandomName 
 
   beforeEach(() => {
+    getRandomPrice = faker.number.float({ min: 10, max: 100, multipleOf: 0.02 });
+    getRandomName = faker.food.fruit();
+    
     cy.resetDB();
+
+
   })
 
 
 
   it('ADD Fruit - Add Available Fruit', () => {
+
+    let getRandomPrice = faker.number.float({ min: 10, max: 100, multipleOf: 0.02 })
+    let getRandomName = faker.food.fruit()
+
     cy.visit('http://localhost:8081/')
 
     cy.get('[placeholder="Fruit name"]').type(getRandomName);
